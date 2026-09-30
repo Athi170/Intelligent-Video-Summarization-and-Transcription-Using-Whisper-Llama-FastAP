@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/static/theme.js?v=1"></script>
+<title>Create account — AI Video Summarizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=Noto+Sans:wght@500&family=Noto+Sans+Devanagari:wght@500&family=Noto+Sans+Tamil:wght@500&family=Noto+Sans+Telugu:wght@500&display=swap">
+<link rel="stylesheet" href="/static/auth.css?v=1">
+</head>
+<body>
+<div class="shell">
+  <aside class="stage" aria-hidden="true">
+    <div class="brand"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg></i>AI Video Summarizer</div>
+    <div>
+      <h2>Any language in. A clear summary out.</h2>
+      <div class="wave" id="wave" style="margin:32px 0 22px"></div>
+      <div class="caption" id="caption"><small id="capLang">English</small><p id="capText"></p></div>
+    </div>
+    <footer>Runs on Whisper and Ollama, so your videos stay on your machine.</footer>
+  </aside>
+  <main class="panel-side">
+    <div class="auth-card">
+      <h1>Create your account</h1>
+      <p class="auth-subtitle">Pick a username and password to start summarizing videos.</p>
+      <div class="auth-error" id="authError" role="alert"></div>
+      <form id="registerForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="field"><input type="text" id="username" name="username" autocomplete="username" minlength="3" required autofocus></div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="field"><input type="password" id="password" name="password" autocomplete="new-password" minlength="6" required><button type="button" class="toggle" id="pwToggle" aria-label="Show password">Show</button></div>
+        </div>
+        <button type="submit" class="auth-submit" id="registerSubmit">Create account</button>
+      </form>
+      <p class="auth-footer">Already registered? <a href="/login">Log in</a></p>
+    </div>
+  </main>
+</div>
+<div id="toastContainer"></div>
+<script>
+(function(){
+  var pw=document.getElementById("password"),t=document.getElementById("pwToggle");
+  t.onclick=function(){var s=pw.type==="password";pw.type=s?"text":"password";t.textContent=s?"Hide":"Show";t.setAttribute("aria-label",s?"Hide password":"Show password")};
+  var w=document.getElementById("wave");
+  for(var i=0;i<44;i++){var b=document.createElement("b");b.style.setProperty("--h",(25+Math.abs(Math.sin(i*.5)*60)+Math.random()*15)+"%");b.style.animationDelay=(i*-.09)+"s";if(i===27)b.className="hot";w.appendChild(b)}
+  var L=[["English","The quarterly numbers look stronger than expected."],["हिन्दी","तिमाही के आंकड़े उम्मीद से बेहतर दिख रहे हैं।"],["தமிழ்","காலாண்டு எண்கள் எதிர்பார்த்ததை விட வலுவாக உள்ளன."],["తెలుగు","త్రైమాసిక సంఖ్యలు ఊహించిన దానికంటే బలంగా ఉన్నాయి."],["Español","Las cifras trimestrales se ven mejores de lo esperado."]],n=0,c=document.getElementById("caption"),lt=document.getElementById("capLang"),tx=document.getElementById("capText");
+  function show(){lt.textContent=L[n][0];tx.textContent=L[n][1];n=(n+1)%L.length}
+  show();
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)setInterval(function(){c.classList.add("swap");setTimeout(function(){show();c.classList.remove("swap")},450)},3200);
+})();
+</script>
+<script src="/static/register.js"></script>
+</body>
+</html>

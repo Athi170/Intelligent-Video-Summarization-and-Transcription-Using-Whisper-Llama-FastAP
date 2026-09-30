@@ -1,0 +1,45 @@
+:root{--ink:#14192e;--stage:#14192e;--text:#14192e;--tint:#eef0fd;--err-bg:#fdecef;--err-line:#f5c2cb;--paper:#f4f6fb;--card:#fff;--line:#dfe3ee;--muted:#5d667f;--accent:#3846e8;--accent-d:#2a36c4;--amber:#f5b03d;--bad:#c62f4a;
+--display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;--body:"Instrument Sans","Segoe UI",system-ui,sans-serif}
+[data-theme=dark]{color-scheme:dark;--stage:#080b18;--text:#e9ecfa;--tint:#20274a;--err-bg:#3a1620;--err-line:#6b2a3a;--paper:#10142a;--card:#171c36;--line:#2b3357;--muted:#9aa3c4;--accent:#6f7bff;--accent-d:#5a67f0;--bad:#ff8fa3}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font-family:var(--body);color:var(--text);background:var(--paper);-webkit-font-smoothing:antialiased}
+.shell{min-height:100%;display:grid;grid-template-columns:1.15fr 1fr}
+.stage{background:var(--stage);color:#e9ecfa;padding:48px 56px;display:flex;flex-direction:column;justify-content:space-between;gap:40px;position:relative;overflow:hidden}
+.brand{display:flex;align-items:center;gap:12px;font:600 1.05rem var(--display)}
+.brand i{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center}
+.stage h2{font:700 clamp(2rem,3.6vw,3.2rem)/1.05 var(--display);letter-spacing:-.02em;max-width:14ch}
+.wave{display:flex;align-items:center;gap:4px;height:84px}
+.wave b{flex:1;max-width:7px;border-radius:4px;background:#4b5586;height:20%;animation:pulse 1.6s ease-in-out infinite}
+.wave b.hot{background:var(--amber)}
+@keyframes pulse{50%{height:var(--h,80%)}}
+.caption{min-height:112px;border-left:3px solid var(--amber);padding-left:18px}
+.caption small{display:block;color:#98a1c7;font-size:.82rem;margin-bottom:6px}
+.caption p{font:500 1.35rem/1.45 "Noto Sans","Noto Sans Devanagari","Noto Sans Tamil","Noto Sans Telugu",var(--body);transition:opacity .45s}
+.caption.swap p,.caption.swap small{opacity:0}
+.stage footer{color:#98a1c7;font-size:.88rem}
+.panel-side{display:grid;place-items:center;padding:40px 24px}
+.auth-card{width:100%;max-width:400px}
+.auth-card h1{font:700 2.1rem/1.1 var(--display);letter-spacing:-.02em}
+.auth-subtitle{color:var(--muted);margin:10px 0 28px;line-height:1.5}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-weight:600;font-size:.92rem;margin-bottom:7px}
+.field{position:relative}
+.field input{width:100%;height:50px;padding:0 16px;font:inherit;color:var(--text);background:var(--card);border:1.5px solid var(--line);border-radius:12px;transition:border-color .15s,box-shadow .15s}
+.field input:hover{border-color:var(--muted)}
+.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+.field input[type=password],.field input.pw{padding-right:64px}
+.toggle{position:absolute;right:6px;top:6px;height:38px;padding:0 12px;border:0;background:none;color:var(--muted);font:600 .85rem var(--body);border-radius:8px;cursor:pointer}
+.toggle:hover{color:var(--accent);background:var(--tint)}
+.auth-submit{width:100%;height:52px;margin-top:6px;border:0;border-radius:12px;background:var(--accent);color:#fff;font:600 1rem var(--body);cursor:pointer;transition:background .15s,transform .1s}
+.auth-submit:hover{background:var(--accent-d)}
+.auth-submit:active{transform:scale(.99)}
+.auth-submit:disabled{opacity:.6;cursor:wait}
+.auth-error{display:none;background:var(--err-bg);color:var(--bad);border:1px solid var(--err-line);padding:12px 14px;border-radius:10px;margin-bottom:18px;font-size:.92rem}
+.auth-error.visible{display:block}
+.auth-footer{margin-top:24px;color:var(--muted);text-align:center;font-size:.94rem}
+.auth-footer a{color:var(--accent);font-weight:600;text-decoration:none}
+.auth-footer a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media(max-width:860px){.shell{grid-template-columns:1fr}.stage{padding:28px 24px;gap:22px}.stage h2,.stage footer{display:none}.wave{height:48px}.caption{min-height:88px}}
+@media(prefers-reduced-motion:reduce){.wave b{animation:none}.caption p{transition:none}}

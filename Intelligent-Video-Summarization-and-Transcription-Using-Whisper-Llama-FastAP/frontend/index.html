@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="/static/theme.js?v=1"></script>
+    <title>AI Video Summarizer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Instrument+Sans:wght@400;500;600&family=Noto+Sans:wght@400&family=Noto+Sans+Devanagari:wght@400&family=Noto+Sans+Tamil:wght@400&family=Noto+Sans+Telugu:wght@400&display=swap">
+    <link rel="stylesheet" href="/static/style.css?v=5">
+    <link rel="stylesheet" href="/static/app-theme.css?v=1">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="page-header">
+            <div style="display:flex; align-items:center; gap:14px;">
+                <span class="logo-mark">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"></rect><path d="M16 10l6-3v10l-6-3"></path></svg>
+                </span>
+                <h1>AI Video Summarizer</h1>
+            </div>
+
+            <div class="user-bar" id="userBar" style="display:none;">
+                <span class="user-chip">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span id="usernameLabel"></span>
+                </span>
+                <button class="icon-button" id="logoutButton">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+                    Log out
+                </button>
+            </div>
+        </div>
+
+        <p class="description">
+            Upload a video to generate a full transcript and an AI-written summary, powered by Whisper and Ollama.
+        </p>
+
+        <!-- Upload Section -->
+        <div class="upload-box panel">
+
+            <div id="dropArea" class="drop-area">
+                <div class="drop-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 8l5-5 5 5"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+                </div>
+                <p class="drop-title">Drag and drop your video here</p>
+                <p>or</p>
+                <label for="videoFile" class="file-label">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 8l5-5 5 5"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path></svg>
+                    Choose video
+                </label>
+                <input type="file" id="videoFile" accept="video/*" hidden>
+            </div>
+
+            <div class="video-preview">
+                <video id="videoPreview" controls style="display: none;"></video>
+            </div>
+
+            <p id="videoInfo" class="video-info"></p>
+
+            <div class="form-group language-select">
+                <label for="languageSelect">Spoken language</label>
+                <select id="languageSelect">
+                    <option value="auto">Auto-detect</option>
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="ta">Tamil</option>
+                    <option value="te">Telugu</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="zh">Chinese</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ar">Arabic</option>
+                </select>
+                <p class="hint">Picking the right language usually improves transcription accuracy over auto-detect.</p>
+            </div>
+
+            <div class="action-row">
+                <button id="summarizeButton">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l14 9-14 9V3z"></path></svg>
+                    Summarize video
+                </button>
+                <button id="resetButton">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.5 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.65 4.36A9 9 0 0 0 20.5 15"></path></svg>
+                    Reset
+                </button>
+            </div>
+
+            <div class="meta-row">
+                <p id="videoId"></p>
+                <p id="status"></p>
+            </div>
+
+            <div class="stepper">
+                <div class="step" id="step-upload">
+                    <div class="step-dot">1</div>
+                    <div class="step-label">Upload</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step-audio">
+                    <div class="step-dot">2</div>
+                    <div class="step-label">Extract audio</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step-transcribe">
+                    <div class="step-dot">3</div>
+                    <div class="step-label">Transcribe</div>
+                </div>
+                <div class="step-line"></div>
+                <div class="step" id="step-summarize">
+                    <div class="step-dot">4</div>
+                    <div class="step-label">Summarize</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <p id="progressText">0%</p>
+
+        </div>
+
+        <div class="section-spacer"></div>
+
+        <!-- Transcript + Summary -->
+        <div class="result-grid">
+
+            <div class="result-box">
+                <div class="result-header">
+                    <h2>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v4"></path></svg>
+                        Transcript
+                    </h2>
+                    <div class="btn-group">
+                        <button class="icon-button" onclick="copyText('transcript')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy
+                        </button>
+                        <button class="icon-button" onclick="downloadText('transcript', 'transcript.txt')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+                            Save
+                        </button>
+                    </div>
+                </div>
+                <div class="result-content placeholder" id="transcript">No transcript yet.</div>
+            </div>
+
+            <div class="result-box">
+                <div class="result-header">
+                    <h2>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M8 12h8M8 16h5"></path><circle cx="8.5" cy="8.5" r="1"></circle></svg>
+                        AI summary
+                    </h2>
+                    <div class="btn-group">
+                        <button class="icon-button" onclick="copyText('summary')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            Copy
+                        </button>
+                        <button class="icon-button" onclick="downloadText('summary', 'summary.txt')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>
+                            Save
+                        </button>
+                    </div>
+                </div>
+                <div class="result-content placeholder" id="summary">No summary yet.</div>
+            </div>
+
+        </div>
+
+        <div class="section-spacer"></div>
+
+        <!-- History -->
+        <div class="result-box panel">
+            <div class="result-header">
+                <h2>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"></path><path d="M3.05 13a9 9 0 1 0 .5-4.5L3 8"></path><path d="M12 7v5l4 2"></path></svg>
+                    Video history
+                </h2>
+                <div class="btn-group">
+                    <button class="icon-button" id="loadHistoryButton">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.5 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.65 4.36A9 9 0 0 0 20.5 15"></path></svg>
+                        Refresh
+                    </button>
+                    <button class="icon-button danger" id="deleteAllHistoryButton">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path></svg>
+                        Delete all
+                    </button>
+                </div>
+            </div>
+            <div id="historyList" class="history-list">
+                <p class="history-empty">No video history yet.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

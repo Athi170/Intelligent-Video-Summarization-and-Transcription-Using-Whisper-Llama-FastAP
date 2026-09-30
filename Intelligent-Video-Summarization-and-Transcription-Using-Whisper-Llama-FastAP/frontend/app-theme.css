@@ -1,0 +1,27 @@
+/* Loaded after style.css: restyles the main app and supports light/dark themes */
+:root{--text:#14192e;--muted:#5d667f;--paper:#f4f6fb;--card:#fff;--tint:#f8f9fe;--tint2:#eef0fd;--line:#dfe3ee;--dash:#b9c0dd;--accent:#3846e8;--accent-d:#2a36c4;--shadow:rgba(20,25,46,.18)}
+[data-theme=dark]{color-scheme:dark;--text:#e9ecfa;--muted:#9aa3c4;--paper:#0d1120;--card:#161b32;--tint:#1c2240;--tint2:#232b52;--line:#2b3357;--dash:#3a4372;--accent:#6f7bff;--accent-d:#5a67f0;--shadow:rgba(0,0,0,.6)}
+body{font-family:"Instrument Sans","Segoe UI",system-ui,sans-serif!important;background:var(--paper)!important;color:var(--text)!important}
+[data-theme=dark] body *{color:inherit}
+h1,h2{font-family:"Bricolage Grotesque","Segoe UI",sans-serif!important;letter-spacing:-.02em;color:var(--text)!important}
+.description,.hint,.video-info,.history-meta,.drop-area p,.step-label,.result-content.placeholder,#progressText,.history-empty,.history-id{color:var(--muted)!important}
+.container{max-width:1080px!important}
+.page-header{padding-bottom:18px;border-bottom:1px solid var(--line)}
+.user-bar{display:flex;align-items:center;gap:10px}
+.page-header .logo-mark{background:var(--accent)!important;color:#fff!important;border-radius:11px!important}
+.panel,.result-box{background:var(--card)!important;border:1px solid var(--line)!important;border-radius:16px!important;box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 32px -18px var(--shadow)!important}
+.drop-area{border:2px dashed var(--dash)!important;border-radius:14px!important;background:var(--tint)!important;transition:border-color .15s,background .15s}
+.drop-area:hover,.drop-area.drag-over{border-color:var(--accent)!important;background:var(--tint2)!important}
+.drop-area .drop-title{color:var(--text)!important}
+button:not(.icon-button):not(#resetButton):not(.theme-toggle),.file-label{background:var(--accent)!important;color:#fff!important;border-radius:10px!important}
+button:not(.icon-button):not(#resetButton):not(.theme-toggle):hover,.file-label:hover{background:var(--accent-d)!important}
+#resetButton,.icon-button,select,input{background:var(--card)!important;color:var(--text)!important;border:1px solid var(--line)!important;border-radius:9px!important}
+#resetButton:hover,.icon-button:hover{background:var(--tint2)!important}
+.step-dot{background:var(--tint)!important;border:1px solid var(--line)!important;color:var(--muted)!important}
+.step-line,.progress-container{background:var(--line)!important}
+.step.active .step-dot,.step.done .step-dot{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important}
+.progress-bar{background:linear-gradient(90deg,var(--accent),#f5b03d)!important}
+.result-content{background:var(--tint)!important;line-height:1.7;font-family:"Noto Sans","Noto Sans Devanagari","Noto Sans Tamil","Noto Sans Telugu","Instrument Sans",sans-serif}
+.history-item{background:var(--tint)!important;border:1px solid var(--line)!important;border-radius:12px!important}
+.toast{background:var(--card)!important;color:var(--text)!important;border:1px solid var(--line)!important}
+a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
